@@ -42,8 +42,11 @@ marked.use({
       tokenizer(src) {
         let m = /^\$\$([\s\S]+?)\$\$/.exec(src);
         if (m) return { type: 'inlineMath', raw: m[0], text: m[1].trim(), display: true };
-        m = /^\$((?:\\\$|[^$\n])+?)\$/.exec(src);
-        if (m) return { type: 'inlineMath', raw: m[0], text: m[1], display: false };
+        // Pandoc-style rule so currency like "$4,433.96" or "$4.4k" stays literal:
+        // opening $ must be followed by non-space, closing $ preceded by non-space
+        // and not followed by a digit; no newline or bare $ inside.
+        m = /^\$(?=\S)((?:\\\$|[^$\n])*?\S)\$(?!\d)/.exec(src);
+        if (m && !/^(\d{1,3}(,\d{3})+(\.\d+)?|\d+(\.\d+)?k)(\s|$)/.test(m[1])) return { type: 'inlineMath', raw: m[0], text: m[1], display: false };
       },
       renderer(t) { return tex(t.text, t.display); },
     },
@@ -69,10 +72,10 @@ function parseEntry(slug) {
     .replace(/^## Grok\s*$/m, '## Grok\'s response (as captured)')
     .replace(/\*Reviewer note:\*/g, '*Note:*');
   // Capture notes come from the curation pass; drop reviewer-workflow sentences.
-  let note = meta['curation note'] || '';
+  let note = meta['curation note'] || meta['capture note'] || '';
   note = note.replace(/\s*Reviewer (may|might)[^.]*\./g, '').replace(/^Kept[^.]*?(\.|:)\s*/,'').trim();
   note = note.charAt(0).toUpperCase() + note.slice(1);
-  const date = (meta.date || '').replace(/\s*\(as listed in the candidate CSV\)/, '');
+  const date = (meta.date || '').replace(/\s*\(as listed in (the candidate CSV|math-physics\.csv)\)/, '');
   return { slug, title, url: meta.url, date, note, raw, body };
 }
 
@@ -132,7 +135,7 @@ function indexPage() {
   const groups = catalog.categories.map((c) => {
     const items = entries.filter((e) => e.category === c.id);
     if (!items.length) return '';
-    return `<section id="${c.id}"><h2>${esc(c.title)}</h2><ul class="entries">
+    return `<section id="${c.id}"><h2>${esc(c.title)}</h2>${c.intro ? `<p class="cat-intro${items.every((e) => e.status === 'speculative') ? ' callout callout-speculative' : ''}">${esc(c.intro)}</p>` : ''}<ul class="entries">
 ${items.map((e) => `<li><a href="${e.slug}.html">${esc(e.title)}</a> ${badge(e)}<p>${esc(e.summary)}</p></li>`).join('\n')}
 </ul></section>`;
   }).join('\n');
@@ -140,7 +143,7 @@ ${items.map((e) => `<li><a href="${e.slug}.html">${esc(e.title)}</a> ${badge(e)}
 <section class="intro">
 <h1>Notebook</h1>
 <p>This is a collection of Joshua Almeida's math and physics explorations: ${entries.length} entries taken from his chats on <a href="https://grok.com">grok.com</a>. Each page shows his questions word for word, followed by the formulas, derivations and code from the reply. Every page links back to the original chat.</p>
-<p>These are personal working notes, not a textbook. The replies are partly excerpted and condensed. Entries marked <span class="badge badge-spec">Speculative / personal construction</span> are invented frameworks or notations. Entries marked <span class="badge badge-expl">Exploratory</span> start from Joshua's own equations. Neither kind is established theory.</p>
+<p>These are personal working notes, not a textbook. The replies are partly excerpted and condensed. Entries marked <span class="badge badge-spec">Speculative / personal construction</span> are invented frameworks or notations, including the whole <a href="#metric">2xc − d metric</a> section. Entries marked <span class="badge badge-expl">Exploratory</span> start from Joshua's own equations. Neither kind is established theory.</p>
 </section>
 ${groups}`;
   return layout({ title: 'Notebook · Math & physics explorations', body, description: "Joshua Almeida's math & physics explorations from his Grok chats" });

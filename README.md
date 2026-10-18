@@ -2,20 +2,21 @@
 
 **Live site:** https://fitzyracing1.github.io/notebook/
 
-Notebook collects Joshua Almeida's math and physics explorations. All 16 entries come from his chats on [grok.com](https://grok.com). Each entry has its own page with:
+Notebook collects Joshua Almeida's math and physics explorations. All 22 entries come from his chats on [grok.com](https://grok.com). Each entry has its own page with:
 
 - Joshua's questions, word for word,
 - the formulas, derivations and code from the reply (math rendered with [KaTeX](https://katex.org)),
 - a link back to the original grok.com chat, and
 - the raw markdown capture it was built from.
 
-Topics are grouped into algebra and number systems, geometry and trigonometry, linear algebra, calculus, probability and statistics, quantum mechanics, classical mechanics and relativity, and numerical methods.
+Topics are grouped into algebra and number systems, geometry and trigonometry, linear algebra, calculus, probability and statistics, quantum mechanics, classical mechanics and relativity, numerical methods, and the 2xc − d metric (Joshua's personal construction).
 
 ## A note on what this is
 
 These are personal working notes, not a textbook, and nobody has peer reviewed them. The replies are partly excerpted and condensed (each page's capture note says what was summarized). Two kinds of entries are labeled on the site:
 
 - **Speculative / personal construction**: invented frameworks or notations. Examples are "Fold Calculus" (from *Invent New Calculus*) and the custom u/p/i ternary system. Neither is established theory.
+- **The 2xc − d metric (personal construction)**: a whole section of six entries built on Joshua's own invented rule 2xc − d = 1 (the "metric for all computing") and related shorthand. Every entry in it is labeled speculative. Any dollar figures that appear there come from an ad-hoc program in the chat and are not real valuations.
 - **Exploratory**: entries that start from Joshua's own equations, such as π² = E·m − c, which the chat itself shows is dimensionally inconsistent.
 
 Entries tagged **Short capture** come from brief chats. They are kept so the collection stays complete.
@@ -49,9 +50,9 @@ On every push to `main`, `.github/workflows/ci.yml` builds and checks the site, 
 
 ## Screenshots
 
-| Index | Entry page |
-|---|---|
-| ![Index](docs/index.png) | ![Fold Calculus entry](docs/fold-calculus.png) |
+| Index | Entry page | Metric entry |
+|---|---|---|
+| ![Index](docs/index.png) | ![Fold Calculus entry](docs/fold-calculus.png) | ![X Metric entry](docs/metric-x-equation.png) |
 
 ## License
 
