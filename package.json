@@ -18,5 +18,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/fitzyracing1/notebook"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/fitzyracing1"
   }
 }
